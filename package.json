@@ -1,6 +1,6 @@
 {
-    "name": "@rappasoft/laravel-boilerplate",
-    "author": "rappasoft rappa819@gmail.com",
+    "name": "carbid360/carbid-admin-ap",
+    "author": "James Puro / jlhpuro@gmail.com - credit to rappasoft",
     "private": true,
     "license": "MIT",
     "scripts": {
