@@ -1,6 +1,6 @@
 {
-    "name": "carbid360/carbid-admin-ap",
-    "author": "James Puro / jlhpuro@gmail.com - credit to rappasoft",
+    "name": "carbid360",
+    "author": "James Puro / jlhpuro@gmail.com - credit to rappasoft boilerplate",
     "private": true,
     "license": "MIT",
     "scripts": {
