@@ -82,9 +82,4 @@ class Handler extends ExceptionHandler
             ? response()->json(['message' => 'Unauthenticated.'], 401)
             : redirect()->guest(route('frontend.auth.login'));
     }
-
-    protected function isApi($request)
-    {
-        return strpos($request->getUri(), '/api/') !== false;
-    }
 }

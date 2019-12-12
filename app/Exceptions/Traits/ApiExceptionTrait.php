@@ -14,6 +14,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 trait ApiExceptionTrait
 {
     /**
+     * Checks if route uses /api/
+     *
+     * @return boolean
+     */
+    protected function isApi($request)
+    {
+        return strpos($request->getUri(), '/api/') !== false;
+    }
+
+    /**
      * Creates a new JSON response based on exception type.
      *
      * @param Request   $request

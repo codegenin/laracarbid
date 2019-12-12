@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\RegisterController;
 
 /*
  * API Access Controllers
@@ -15,7 +16,7 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
         Route::post('login', [LoginController::class, 'authenticate'])->name('login');
 
         // Registration Routes
-        #Route::post('register', [RegisterController::class, 'register'])->name('register.post');
+        Route::post('register', [RegisterController::class, 'register'])->name('register.post');
     });
 
 

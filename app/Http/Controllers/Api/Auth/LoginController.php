@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Exceptions\GeneralException;
-use App\Events\Frontend\Auth\UserLoggedIn;
-use App\Events\Frontend\Auth\UserLoggedOut;
+use App\Events\Api\Auth\UserLoggedIn;
+use App\Events\Api\Auth\UserLoggedOut;
 use App\Exceptions\ApiResponseException;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -74,15 +74,15 @@ class LoginController extends BaseResponseController
         if (!$user->isConfirmed()) {
             // If the user is pending (account approval is on)
             if ($user->isPending()) {
-                throw new ApiResponseException(__('exceptions.frontend.auth.confirmation.pending'), 403);
+                throw new ApiResponseException(__('exceptions.Api.auth.confirmation.pending'), 403);
             }
             // Otherwise see if they want to resent the confirmation e-mail
-            throw new ApiResponseException(__('exceptions.frontend.auth.confirmation.resend', ['url' => route('frontend.auth.account.confirm.resend', e($user->{$user->getUuidName()}))]), 403);
+            throw new ApiResponseException(__('exceptions.Api.auth.confirmation.resend', ['url' => route('Api.auth.account.confirm.resend', e($user->{$user->getUuidName()}))]), 403);
         }
 
         // Check tp see if the user account is active
         if (!$user->isActive()) {
-            throw new ApiResponseException(__('exceptions.frontend.auth.deactivated'), 403);
+            throw new ApiResponseException(__('exceptions.Api.auth.deactivated'), 403);
         }
 
         // Everything ok, process the user token

@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Traits\ApiExceptionTrait;
 use Exception;
 use Throwable;
 
@@ -10,6 +11,8 @@ use Throwable;
  */
 class GeneralException extends Exception
 {
+    use ApiExceptionTrait;
+
     /**
      * @var
      */
@@ -41,8 +44,12 @@ class GeneralException extends Exception
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function render($request)
+    public function render($request, Exception $exception)
     {
+        if ($this->isApi($request)) {
+            return $this->getJsonResponseForException($request, $exception);
+        }
+
         // All instances of GeneralException redirect back with a flash message to show a bootstrap alert-error
         return redirect()
             ->back()

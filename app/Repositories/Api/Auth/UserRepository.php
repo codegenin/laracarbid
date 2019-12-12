@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Frontend\Auth;
+namespace App\Repositories\Api\Auth;
 
 use App\Models\Auth\User;
 use Illuminate\Http\UploadedFile;
@@ -94,14 +94,24 @@ class UserRepository extends BaseRepository
     {
         return DB::transaction(function () use ($data) {
             $user = $this->model::create([
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
-                'email' => $data['email'],
+                'first_name'        => $data['first_name'],
+                'last_name'         => $data['last_name'],
+                'email'             => $data['email'],
                 'confirmation_code' => md5(uniqid(mt_rand(), true)),
-                'active' => true,
-                'password' => $data['password'],
+                'active'            => true,
+                'password'          => $data['password'],
                 // If users require approval or needs to confirm email
                 'confirmed' => !(config('access.users.requires_approval') || config('access.users.confirm_email')),
+            ]);
+
+            // Create user profile
+            $user->profile()->create([
+                'business_name'  => $data['business_name'],
+                'license_number' => $data['license_number'],
+                'dealer_bond'    => $data['dealer_bond'],
+                'dealer_type'    => $data['dealer_type'],
+                'zipcode'        => $data['zipcode'],
+                'mobile'         => $data['mobile']
             ]);
 
             if ($user) {
