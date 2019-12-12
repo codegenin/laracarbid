@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use App\Exceptions\GeneralException;
 use App\Events\Frontend\Auth\UserLoggedIn;
 use App\Events\Frontend\Auth\UserLoggedOut;
+use App\Exceptions\ApiResponseException;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\Api\BaseResponseController;
@@ -73,15 +74,15 @@ class LoginController extends BaseResponseController
         if (!$user->isConfirmed()) {
             // If the user is pending (account approval is on)
             if ($user->isPending()) {
-                abort(403, __('exceptions.frontend.auth.confirmation.pending'));
+                throw new ApiResponseException(__('exceptions.frontend.auth.confirmation.pending'), 403);
             }
             // Otherwise see if they want to resent the confirmation e-mail
-            abort(400, __('exceptions.frontend.auth.confirmation.resend', ['url' => route('frontend.auth.account.confirm.resend', e($user->{$user->getUuidName()}))]));
+            throw new ApiResponseException(__('exceptions.frontend.auth.confirmation.resend', ['url' => route('frontend.auth.account.confirm.resend', e($user->{$user->getUuidName()}))]), 403);
         }
 
         // Check tp see if the user account is active
         if (!$user->isActive()) {
-            abort(403, __('exceptions.frontend.auth.deactivated'));
+            throw new ApiResponseException(__('exceptions.frontend.auth.deactivated'), 403);
         }
 
         // Everything ok, process the user token
@@ -97,9 +98,7 @@ class LoginController extends BaseResponseController
         // Fire vent, Log in user
         event(new UserLoggedIn($user));
 
-        return response()->json([
-            'status'       => true,
-            'message'      => 'Login successful',
+        return $this->responseWithSuccess(__('auth.login_successful'), [
             'access_token' => $tokenResult->accessToken,
             'token_type'   => 'Bearer',
             'expires_at'   => Carbon::parse(
@@ -121,7 +120,8 @@ class LoginController extends BaseResponseController
         event(new UserLoggedOut($request->user()));
 
         // Laravel specific logic
-        $request->user()->token()->revoke();
+        $request->user()->token()->revoke(); // Revoke token
+        $request->user()->token()->delete(); // Delete token, just in case cant be revoke
 
 
         return $this->responseWithSuccess(__('auth.logout_successful'));

@@ -12,19 +12,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait ApiExceptionTrait
 {
-
-    /**
-     * Determines if the given exception is from api response and display proper message
-     *
-     * @param Exception $e
-     * @return bool
-     */
-    public function isApiResponseException(Exception $e)
-    {
-        return $e instanceof ApiResponseException;
-    }
-
-
     /**
      * Creates a new JSON response based on exception type.
      *
@@ -49,7 +36,7 @@ trait ApiExceptionTrait
                 $response = $this->jsonResponse([
                     'status'    => false,
                     'message' => trans('exception.page_not_found_exception'),
-                ], 401);
+                ], 404);
 
                 break;
 
@@ -58,7 +45,7 @@ trait ApiExceptionTrait
                 $response = $this->jsonResponse([
                     'status'    => false,
                     'message' => trans('exception.unauthorized_exception'),
-                ], 401);
+                ], 403);
 
                 break;
 
@@ -69,7 +56,7 @@ trait ApiExceptionTrait
                 $response = $this->jsonResponse([
                     'status'    => false,
                     'message' => $e->getMessage(),
-                ], 405);
+                ], $e->getCode());
 
                 break;
 
@@ -107,6 +94,17 @@ trait ApiExceptionTrait
         $payload = $payload ?: [];
 
         return response()->json($payload, $statusCode);
+    }
+
+    /**
+     * Determines if the given exception is from api response and display proper message
+     *
+     * @param Exception $e
+     * @return bool
+     */
+    public function isApiResponseException(Exception $e)
+    {
+        return $e instanceof ApiResponseException;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Throwable;
 
 class ApiResponseException extends Exception
 {
@@ -19,20 +20,8 @@ class ApiResponseException extends Exception
      * @param string                                      $message
      * @param  \Symfony\Component\HttpFoundation\Response $response 
      */
-    public function __construct($message = 'An error occurred', $response = null)
+    public function __construct($message, $code = 0, Throwable $previous = null)
     {
-        parent::__construct($message);
-
-        $this->response = $response;
-    }
-
-    /**
-     * Get the underlying response instance.
-     *
-     * @return \Symfony\Component\HttpFoundation\Response|null
-     */
-    public function getResponse()
-    {
-        return $this->response;
+        parent::__construct($message, $code, $previous);
     }
 }
