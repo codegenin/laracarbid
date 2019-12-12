@@ -8,6 +8,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait ApiExceptionTrait
@@ -46,6 +47,15 @@ trait ApiExceptionTrait
                     'status'    => false,
                     'message' => trans('exception.unauthorized_exception'),
                 ], 403);
+
+                break;
+
+            case $this->isValidationException($e):
+
+                $response = $this->jsonResponse([
+                    'status'    => false,
+                    'message' => $e->getMessage(),
+                ], 400);
 
                 break;
 
@@ -94,6 +104,11 @@ trait ApiExceptionTrait
         $payload = $payload ?: [];
 
         return response()->json($payload, $statusCode);
+    }
+
+    public function isValidationException(Exception $e)
+    {
+        return $e instanceof ValidationException;
     }
 
     /**

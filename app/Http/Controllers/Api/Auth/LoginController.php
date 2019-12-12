@@ -116,13 +116,12 @@ class LoginController extends BaseResponseController
      */
     public function logout(Request $request)
     {
-        // Fire event, Log out user
-        event(new UserLoggedOut($request->user()));
-
         // Laravel specific logic
         $request->user()->token()->revoke(); // Revoke token
         $request->user()->token()->delete(); // Delete token, just in case cant be revoke
 
+        // Fire event, Log out user
+        event(new UserLoggedOut($request->user()));
 
         return $this->responseWithSuccess(__('auth.logout_successful'));
     }
