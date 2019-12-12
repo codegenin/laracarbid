@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Traits\ApiExceptionTrait;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -12,6 +14,8 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
  */
 class Handler extends ExceptionHandler
 {
+    use ApiExceptionTrait;
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -53,6 +57,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($this->isApi($request)) {
+            return $this->getJsonResponseForException($request, $exception);
+        }
+
         if ($exception instanceof UnauthorizedException) {
             return redirect()
                 ->route(home_route())
@@ -73,5 +81,10 @@ class Handler extends ExceptionHandler
         return $request->expectsJson()
             ? response()->json(['message' => 'Unauthenticated.'], 401)
             : redirect()->guest(route('frontend.auth.login'));
+    }
+
+    protected function isApi($request)
+    {
+        return strpos($request->getUri(), '/api/') !== false;
     }
 }

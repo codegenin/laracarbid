@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Auth\Traits\SendUserPasswordReset;
 use Altek\Accountant\Recordable as RecordableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * Class User.
@@ -25,7 +26,8 @@ abstract class BaseUser extends Authenticatable implements Recordable
         RecordableTrait,
         SendUserPasswordReset,
         SoftDeletes,
-        Uuid;
+        Uuid,
+        HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
