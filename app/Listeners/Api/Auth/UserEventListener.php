@@ -3,6 +3,7 @@
 namespace App\Listeners\Api\Auth;
 
 use App\Events\Api\Auth\UserLoggedIn;
+use App\Events\Api\Auth\UserConfirmed;
 use App\Events\Api\Auth\UserLoggedOut;
 use App\Events\Api\Auth\UserRegistered;
 
@@ -55,6 +56,13 @@ class UserEventListener
         logger('User Registered: ' . $event->user->full_name);
     }
 
+    /**
+     * @param $event
+     */
+    public function onConfirmed($event)
+    {
+        logger('User Confirmed: ' . $event->user->full_name);
+    }
 
     /**
      * Register the listeners for the subscriber.
@@ -76,6 +84,11 @@ class UserEventListener
         $events->listen(
             UserRegistered::class,
             'App\Listeners\Api\Auth\UserEventListener@onRegistered'
+        );
+
+        $events->listen(
+            UserConfirmed::class,
+            'App\Listeners\Frontend\Auth\UserEventListener@onConfirmed'
         );
     }
 }

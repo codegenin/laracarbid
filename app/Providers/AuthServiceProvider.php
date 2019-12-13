@@ -27,7 +27,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        // Passport configuration
         Passport::routes();
+        Passport::personalAccessTokensExpireIn(now()->addDays(3));
 
         // Implicitly grant "Admin" role all permissions
         // This works in the app by using gate-related functions like auth()->user->can() and @can()

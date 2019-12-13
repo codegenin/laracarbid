@@ -17,6 +17,9 @@ return [
         // Whether or not the user has to confirm their email when signing up
         'confirm_email' => env('CONFIRM_EMAIL', false),
 
+        // Whether or not the user has to confirm their mobile number via sms
+        'confirm_mobile' => env('CONFIRM_MOBILE', false),
+
         // Whether or not the users email can be changed on the edit profile screen
         'change_email' => env('CHANGE_EMAIL', false),
 

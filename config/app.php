@@ -23,7 +23,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel '.app()->version().' Boilerplate'),
+    'name' => env('APP_NAME', 'Laravel ' . app()->version() . ' Boilerplate'),
 
     /*
     |--------------------------------------------------------------------------
@@ -201,6 +201,7 @@ return [
         App\Providers\HelperServiceProvider::class,
         App\Providers\ObserverServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\ResourceServiceProvider::class,
     ],
 
     /*

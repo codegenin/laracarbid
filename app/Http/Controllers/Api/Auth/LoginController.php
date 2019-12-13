@@ -11,6 +11,7 @@ use App\Exceptions\ApiResponseException;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\Api\BaseResponseController;
+use App\Http\Resources\Auth\TokenResponseResource;
 
 /**
  * Class LoginController.
@@ -74,37 +75,27 @@ class LoginController extends BaseResponseController
         if (!$user->isConfirmed()) {
             // If the user is pending (account approval is on)
             if ($user->isPending()) {
-                throw new ApiResponseException(__('exceptions.Api.auth.confirmation.pending'), 403);
+                throw new ApiResponseException(__('exceptions.api.auth.confirmation.pending'), 403);
             }
             // Otherwise see if they want to resent the confirmation e-mail
-            throw new ApiResponseException(__('exceptions.Api.auth.confirmation.resend', ['url' => route('Api.auth.account.confirm.resend', e($user->{$user->getUuidName()}))]), 403);
+            throw new ApiResponseException(__('exceptions.api.auth.unconfirmed_account'), 403);
         }
 
         // Check tp see if the user account is active
         if (!$user->isActive()) {
-            throw new ApiResponseException(__('exceptions.Api.auth.deactivated'), 403);
+            throw new ApiResponseException(__('exceptions.api.auth.deactivated'), 403);
         }
 
         // Everything ok, process the user token
         $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
 
-        if ($request->remember_me) {
-            $token->expires_at = Carbon::now()->addWeeks(1);
-        }
-
-        $token->save();
-
-        // Fire vent, Log in user
+        // Fire event, Log in user
         event(new UserLoggedIn($user));
 
-        return $this->responseWithSuccess(__('auth.login_successful'), [
-            'access_token' => $tokenResult->accessToken,
-            'token_type'   => 'Bearer',
-            'expires_at'   => Carbon::parse(
-                $tokenResult->token->expires_at
-            )->toDateTimeString()
-        ]);
+        return $this->responseWithSuccess(
+            __('auth.api.login_successful'),
+            new TokenResponseResource($tokenResult)
+        );
     }
 
     /**

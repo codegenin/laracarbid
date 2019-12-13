@@ -26,7 +26,7 @@ class BaseResponseController extends Controller
      * @param $message
      * @return mixed
      */
-    public function responseWithSuccess($message, $data = '',  $status = 200)
+    public function responseWithSuccess($message = 'success', $data = '',  $status = 200)
     {
         return response()->json([
             'status'  => true,

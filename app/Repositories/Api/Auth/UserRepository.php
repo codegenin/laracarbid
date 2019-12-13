@@ -4,15 +4,13 @@ namespace App\Repositories\Api\Auth;
 
 use App\Models\Auth\User;
 use Illuminate\Http\UploadedFile;
-use App\Models\Auth\SocialAccount;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\GeneralException;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use App\Events\Frontend\Auth\UserConfirmed;
-use App\Events\Frontend\Auth\UserProviderRegistered;
-use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
+use App\Events\Api\Auth\UserConfirmed;
+use App\Notifications\Api\Auth\UserNeedsConfirmation;
 
 /**
  * Class UserRepository.
@@ -74,13 +72,14 @@ class UserRepository extends BaseRepository
     {
         $user = $this->model
             ->where('confirmation_code', $code)
+            ->where('confirmed', 0)
             ->first();
 
         if ($user instanceof $this->model) {
             return $user;
         }
 
-        throw new GeneralException(__('exceptions.backend.access.users.not_found'));
+        throw new GeneralException(__('exceptions.api.access.users.not_found'));
     }
 
     /**
@@ -97,11 +96,11 @@ class UserRepository extends BaseRepository
                 'first_name'        => $data['first_name'],
                 'last_name'         => $data['last_name'],
                 'email'             => $data['email'],
-                'confirmation_code' => md5(uniqid(mt_rand(), true)),
+                'confirmation_code' => sms_confirmation_code(),
                 'active'            => true,
                 'password'          => $data['password'],
                 // If users require approval or needs to confirm email
-                'confirmed' => !(config('access.users.requires_approval') || config('access.users.confirm_email')),
+                'confirmed' => !(config('access.users.requires_approval') || config('access.users.confirm_mobile')),
             ]);
 
             // Create user profile
@@ -120,14 +119,14 @@ class UserRepository extends BaseRepository
             }
 
             /*
-             * If users have to confirm their email and this is not a social account,
+             * If users have to confirm their email/mobile and this is not a social account,
              * and the account does not require admin approval
-             * send the confirmation email
+             * send the confirmation email/sms
              *
              * If this is a social account they are confirmed through the social provider by default
              */
-            if (config('access.users.confirm_email')) {
-                // Pretty much only if account approval is off, confirm email is on, and this isn't a social account.
+            if (config('access.users.confirm_mobile')) {
+                // Pretty much only if account approval is off, confirm email is on or confirm mobile is on, and this isn't a social account.
                 $user->notify(new UserNeedsConfirmation($user->confirmation_code));
             }
 
@@ -233,89 +232,18 @@ class UserRepository extends BaseRepository
         $user = $this->findByConfirmationCode($code);
 
         if ($user->confirmed === true) {
-            throw new GeneralException(__('exceptions.frontend.auth.confirmation.already_confirmed'));
+            throw new GeneralException(__('exceptions.api.auth.confirmation.already_confirmed'));
         }
 
         if ($user->confirmation_code === $code) {
             $user->confirmed = true;
 
             event(new UserConfirmed($user));
-
-            return $user->save();
+            $user->save();
+            return $user;
         }
 
-        throw new GeneralException(__('exceptions.frontend.auth.confirmation.mismatch'));
-    }
-
-    /**
-     * @param $data
-     * @param $provider
-     *
-     * @throws GeneralException
-     * @return mixed
-     */
-    public function findOrCreateProvider($data, $provider)
-    {
-        // User email may not provided.
-        $user_email = $data->email ?: "{$data->id}@{$provider}.com";
-
-        // Check to see if there is a user with this email first.
-        $user = $this->getByColumn($user_email, 'email');
-
-        /*
-         * If the user does not exist create them
-         * The true flag indicate that it is a social account
-         * Which triggers the script to use some default values in the create method
-         */
-        if (!$user) {
-            // Registration is not enabled
-            if (!config('access.registration')) {
-                throw new GeneralException(__('exceptions.frontend.auth.registration_disabled'));
-            }
-
-            // Get users first name and last name from their full name
-            $nameParts = $this->getNameParts($data->getName());
-
-            $user = $this->model::create([
-                'first_name' => $nameParts['first_name'],
-                'last_name' => $nameParts['last_name'],
-                'email' => $user_email,
-                'active' => true,
-                'confirmed' => true,
-                'password' => null,
-                'avatar_type' => $provider,
-            ]);
-
-            if ($user) {
-                // Add the default site role to the new user
-                $user->assignRole(config('access.users.default_role'));
-            }
-
-            event(new UserProviderRegistered($user));
-        }
-
-        // See if the user has logged in with this social account before
-        if (!$user->hasProvider($provider)) {
-            // Gather the provider data for saving and associate it with the user
-            $user->providers()->save(new SocialAccount([
-                'provider' => $provider,
-                'provider_id' => $data->id,
-                'token' => $data->token,
-                'avatar' => $data->avatar,
-            ]));
-        } else {
-            // Update the users information, token and avatar can be updated.
-            $user->providers()->update([
-                'token' => $data->token,
-                'avatar' => $data->avatar,
-            ]);
-
-            $user->avatar_type = $provider;
-            $user->update();
-        }
-
-        // Return the user object
-        return $user;
+        throw new GeneralException(__('exceptions.api.auth.confirmation.mismatch'));
     }
 
     /**

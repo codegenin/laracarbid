@@ -1,6 +1,6 @@
 <?php
 
-if (! function_exists('app_name')) {
+if (!function_exists('app_name')) {
     /**
      * Helper to grab the application name.
      *
@@ -12,7 +12,7 @@ if (! function_exists('app_name')) {
     }
 }
 
-if (! function_exists('gravatar')) {
+if (!function_exists('gravatar')) {
     /**
      * Access the gravatar helper.
      */
@@ -22,7 +22,7 @@ if (! function_exists('gravatar')) {
     }
 }
 
-if (! function_exists('home_route')) {
+if (!function_exists('home_route')) {
     /**
      * Return the route to the "home" page depending on authentication/authorization status.
      *
@@ -39,5 +39,17 @@ if (! function_exists('home_route')) {
         }
 
         return 'frontend.index';
+    }
+}
+
+
+if (!function_exists('sms_confirmation_code')) {
+    /**
+     * Generate 4 digits random numbers
+     */
+    function sms_confirmation_code()
+    {
+        $rand = rand(0, 9999);
+        return str_pad($rand, 4, '0', STR_PAD_LEFT);
     }
 }
