@@ -10,6 +10,7 @@ use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Events\Api\Auth\UserConfirmed;
+use App\Exceptions\ApiResponseException;
 use App\Notifications\Api\Auth\UserNeedsConfirmation;
 
 /**
@@ -49,6 +50,26 @@ class UserRepository extends BaseRepository
      * @throws GeneralException
      * @return mixed
      */
+    public function findBymobile($mobile)
+    {
+        $user = $this->model->whereHas('profile', function ($query) use ($mobile) {
+            $query->where('mobile', $mobile);
+        })
+            ->first();
+
+        if ($user instanceof $this->model) {
+            return $user;
+        }
+
+        throw new ApiResponseException(__('exceptions.api.access.users.not_found'), 404);
+    }
+
+    /**
+     * @param $uuid
+     *
+     * @throws GeneralException
+     * @return mixed
+     */
     public function findByUuid($uuid)
     {
         $user = $this->model
@@ -59,7 +80,7 @@ class UserRepository extends BaseRepository
             return $user;
         }
 
-        throw new GeneralException(__('exceptions.backend.access.users.not_found'));
+        throw new ApiResponseException(__('exceptions.api.access.users.not_found'), 404);
     }
 
     /**
@@ -79,7 +100,7 @@ class UserRepository extends BaseRepository
             return $user;
         }
 
-        throw new GeneralException(__('exceptions.api.access.users.not_found'));
+        throw new ApiResponseException(__('exceptions.api.access.users.not_found'), 404);
     }
 
     /**
@@ -232,7 +253,7 @@ class UserRepository extends BaseRepository
         $user = $this->findByConfirmationCode($code);
 
         if ($user->confirmed === true) {
-            throw new GeneralException(__('exceptions.api.auth.confirmation.already_confirmed'));
+            throw new ApiResponseException(__('exceptions.api.auth.confirmation.already_confirmed'), 400);
         }
 
         if ($user->confirmation_code === $code) {
@@ -243,7 +264,7 @@ class UserRepository extends BaseRepository
             return $user;
         }
 
-        throw new GeneralException(__('exceptions.api.auth.confirmation.mismatch'));
+        throw new ApiResponseException(__('exceptions.api.auth.confirmation.mismatch'), 400);
     }
 
     /**

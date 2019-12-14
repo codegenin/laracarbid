@@ -19,6 +19,8 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
         Route::post('register', [RegisterController::class, 'register'])->name('register');
         // Confirmation code
         Route::post('confirm', [ConfirmAccountController::class, 'confirm'])->name('confirm');
+        // Resend confirmation code
+        Route::post('confirm-resend', [ConfirmAccountController::class, 'sendConfirmation'])->name('confirm');
     });
 
 
