@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications\Frontend\Auth;
+namespace App\Notifications\Api\Auth;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
@@ -51,10 +51,12 @@ class UserNeedsPasswordReset extends Notification
      */
     public function toMail($notifiable)
     {
+        $link = config('access.users.password_reset_url') . $this->token;
+
         return (new MailMessage())
-            ->subject(app_name().': '.__('strings.emails.auth.password_reset_subject'))
+            ->subject(app_name() . ': ' . __('strings.emails.auth.password_reset_subject'))
             ->line(__('strings.emails.auth.password_cause_of_email'))
-            ->action(__('buttons.emails.auth.reset_password'), route('frontend.auth.password.reset.form', $this->token))
+            ->action(__('buttons.emails.auth.reset_password'), $link)
             ->line(__('strings.emails.auth.password_if_not_requested'));
     }
 }

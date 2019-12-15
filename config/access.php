@@ -14,6 +14,9 @@ return [
 
     // Configurations for the user
     'users' => [
+        // Set the reset password url
+        'password_reset_url' => env('PASSWORD_RESET_URL', 'https://localhost'),
+
         // Whether or not the user has to confirm their email when signing up
         'confirm_email' => env('CONFIRM_EMAIL', false),
 

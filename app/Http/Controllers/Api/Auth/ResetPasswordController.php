@@ -1,19 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\Auth;
+namespace App\Http\Controllers\Api\Auth;
 
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
+use App\Repositories\Api\Auth\UserRepository;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use App\Repositories\Frontend\Auth\UserRepository;
-use App\Http\Requests\Frontend\Auth\ResetPasswordRequest;
+use App\Http\Controllers\Api\BaseResponseController;
+use App\Http\Requests\Api\Auth\ResetPasswordRequest;
+use App\Http\Requests\Api\Auth\VerifyPasswordToken;
 
 /**
  * Class ResetPasswordController.
  */
-class ResetPasswordController extends Controller
+class ResetPasswordController extends BaseResponseController
 {
     use ResetsPasswords;
 
@@ -33,30 +36,25 @@ class ResetPasswordController extends Controller
     }
 
     /**
-     * Display the password reset view for the given token.
-     *
-     * If no token is present, display the link request form.
+     * Verify the password reset for the given token.
      *
      * @param string|null $token
      *
      * @return \Illuminate\Http\Response
      */
-    public function showResetForm($token = null)
+    public function verifyResetToken(VerifyPasswordToken $request)
     {
-        if (!$token) {
-            return redirect()->route('frontend.auth.password.email');
+        if (!$request->token) {
+            return $this->responseWithSuccess(__('auth.password.token_problem'));
         }
 
-        $user = $this->userRepository->findByPasswordResetToken($token);
+        $user = $this->userRepository->findByPasswordResetToken($request->token);
 
-        if ($user && resolve('auth.password.broker')->tokenExists($user, $token)) {
-            return view('frontend.auth.passwords.reset')
-                ->withToken($token)
-                ->withEmail($user->email);
+        if ($user && resolve('auth.password.broker')->tokenExists($user, $request->token)) {
+            return $this->responseWithSuccess(__('auth.password.valid_token'));
         }
 
-        return redirect()->route('frontend.auth.password.email')
-            ->withFlashDanger(__('exceptions.frontend.auth.password.reset_problem'));
+        return $this->responseWithError(__('auth.password.token_problem'));
     }
 
     /**
@@ -77,12 +75,7 @@ class ResetPasswordController extends Controller
             }
         );
 
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
-        return $response === Password::PASSWORD_RESET
-            ? $this->sendResetResponse($response)
-            : $this->sendResetFailedResponse($request, $response);
+        return $this->responseWithError(__('auth.password.reset_successful'));
     }
 
     /**
@@ -104,16 +97,5 @@ class ResetPasswordController extends Controller
         event(new PasswordReset($user));
 
         $this->guard()->login($user);
-    }
-
-    /**
-     * Get the response for a successful password reset.
-     *
-     * @param  string  $response
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function sendResetResponse($response)
-    {
-        return redirect()->route(home_route())->withFlashSuccess(e(trans($response)));
     }
 }

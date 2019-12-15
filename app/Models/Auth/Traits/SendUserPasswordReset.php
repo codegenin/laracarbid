@@ -2,7 +2,7 @@
 
 namespace App\Models\Auth\Traits;
 
-use App\Notifications\Frontend\Auth\UserNeedsPasswordReset;
+use App\Notifications\Api\Auth\UserNeedsPasswordReset;
 
 /**
  * Class SendUserPasswordReset.

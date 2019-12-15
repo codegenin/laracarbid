@@ -52,8 +52,7 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
         //     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.email');
         //     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email.post');
 
-        //     Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset.form');
-        //     Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
-        //
+        Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset.form');
+        Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
     });
 });
