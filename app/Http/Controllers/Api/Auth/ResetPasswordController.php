@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Repositories\Api\Auth\UserRepository;
 use Illuminate\Foundation\Auth\ResetsPasswords;
