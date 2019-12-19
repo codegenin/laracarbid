@@ -19,6 +19,6 @@ class ListPageController extends BaseResponseController
         $pages = $this->pageRepository
             ->orderBy('order')->get();
 
-        return $this->responseWithSuccess('test', $pages);
+        return $this->responseWithSuccess(__('string.general.success'), $pages);
     }
 }

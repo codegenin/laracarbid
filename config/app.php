@@ -191,6 +191,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         // Package Service Providers that aren't auto-discover...
+        'Barryvdh\TranslationManager\ManagerServiceProvider',
 
         // Application Service Providers...
         App\Providers\AppServiceProvider::class,
