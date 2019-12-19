@@ -45,6 +45,6 @@ class RegisterController extends BaseResponseController
 
         event(new UserRegistered($user));
 
-        return $this->responseWithSuccess(__('exceptions.api.auth.confirmation.created_confirm'));
+        return $this->responseWithSuccess(__('api.register.confirmation.created'));
     }
 }

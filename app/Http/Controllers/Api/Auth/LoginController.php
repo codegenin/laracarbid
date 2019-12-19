@@ -93,7 +93,7 @@ class LoginController extends BaseResponseController
         event(new UserLoggedIn($user));
 
         return $this->responseWithSuccess(
-            __('auth.api.login_successful'),
+            __('api.messages.response_success'),
             new TokenResponseResource($tokenResult)
         );
     }

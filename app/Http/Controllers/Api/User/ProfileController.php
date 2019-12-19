@@ -17,6 +17,6 @@ class ProfileController extends BaseResponseController
 
     public function index()
     {
-        return $this->responseWithSuccess(__('string.general.success'), new ProfileResource(auth()->user()));
+        return $this->responseWithSuccess(__('api.messages.response_success'), new ProfileResource(auth()->user()));
     }
 }
