@@ -243,6 +243,16 @@ class UserRepository extends BaseRepository
     }
 
     /**
+     * @param mixed $locale
+     */
+    public function updateLocale($locale)
+    {
+        $user = $this->getById(auth()->id());
+
+        return $user->update(['locale' => $locale]);
+    }
+
+    /**
      * @param $code
      *
      * @throws GeneralException

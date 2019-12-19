@@ -34,22 +34,7 @@ abstract class BaseUser extends Authenticatable implements Recordable
      *
      * @var array
      */
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'avatar_type',
-        'avatar_location',
-        'password',
-        'password_changed_at',
-        'active',
-        'confirmation_code',
-        'confirmed',
-        'timezone',
-        'last_login_at',
-        'last_login_ip',
-        'to_be_logged_out',
-    ];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     /**
      * The dynamic attributes from mutators that should be returned with the user object.
