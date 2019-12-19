@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\Api\User\ProfileController;
 
+
 /*
  * User Access Controllers
- * All route names are prefixed with 'frontend.auth'.
+ * All route names are prefixed with 'api.user'.
  */
 
 Route::group(['namespace' => 'User', 'prefix' => 'user', 'as' => 'user.'], function () {
