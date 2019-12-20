@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+/**
+ * Class BaseResponseController
+ */
 class BaseResponseController extends Controller
 {
     /**
