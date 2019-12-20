@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\Category;
+namespace App\Http\Controllers\Api\Vehicle;
 
 use App\Http\Controllers\Api\BaseResponseController;
-use App\Http\Resources\Category\CategoryResource;
-use App\Repositories\Api\Vehicle\CategoryRepository;
+use App\Http\Resources\Vehicle\VehicleCategoryResource;
+use App\Repositories\Api\Vehicle\VehicleCategoryRepository;
 
 /**
- * Class ListCategoryController
+ * Class VehicleCategoryController
  */
-class ListCategoryController extends BaseResponseController
+class VehicleCategoryController extends BaseResponseController
 {
     protected $categoryRepository;
 
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(VehicleCategoryRepository $categoryRepository)
     {
         $this->categoryRepository = $categoryRepository;
     }
@@ -24,7 +24,7 @@ class ListCategoryController extends BaseResponseController
 
         return $this->responseWithSuccess(
             __('api.messages.response_success'),
-            CategoryResource::collection($categories)
+            VehicleCategoryResource::collection($categories)
         );
     }
 }

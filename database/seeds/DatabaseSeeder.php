@@ -20,11 +20,11 @@ class DatabaseSeeder extends Seeder
             'ledgers',
             'jobs',
             'sessions',
-            'categories'
+            'vehicle_categories'
         ]);
 
         $this->call(AuthTableSeeder::class);
-        $this->call(CategoryTableSeeder::class);
+        $this->call(VehicleCategoryTableSeeder::class);
         Model::reguard();
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-use App\Models\Vehicle\Category;
+use App\Models\Vehicle\VehicleCategory;
 use Illuminate\Database\Seeder;
 
 /**
- * Class CategoryTableSeeder.
+ * Class VehicleCategoryTableSeeder.
  */
-class CategoryTableSeeder extends Seeder
+class VehicleCategoryTableSeeder extends Seeder
 {
     use DisableForeignKeys, TruncateTable;
 
@@ -31,7 +31,7 @@ class CategoryTableSeeder extends Seeder
         ];
 
         foreach ($categories as $category) {
-            Category::create([
+            VehicleCategory::create([
                 'title' => $category,
                 'description' => strtolower($category),
             ]);
