@@ -17,12 +17,12 @@ class ProfileResource extends JsonResource
         return [
             'name'        => $this->full_name,
             'email'       => $this->email,
-            'business'    => $this->profile->business_name,
-            'license'     => $this->profile->license_number,
-            'dealer_bond' => $this->profile->deale_bond,
-            'dealer_type' => $this->profile->deale_type,
-            'zip'         => $this->profile->zipcode,
-            'mobile'      => $this->profile->mobile,
+            'business'    => ($this->profile->business_name) ?? '',
+            'license'     => ($this->profile->license_number) ?? '',
+            'dealer_bond' => ($this->profile->deale_bond) ?? '',
+            'dealer_type' => ($this->profile->deale_type) ?? '',
+            'zip'         => ($this->profile->zipcode) ?? '',
+            'mobile'      => ($this->profile->mobile) ?? '',
         ];
     }
 }
