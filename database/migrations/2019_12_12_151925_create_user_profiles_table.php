@@ -20,8 +20,8 @@ class CreateUserProfilesTable extends Migration
             $table->string('license_number')->nullable();
             $table->string('dealer_bond')->nullable();
             $table->string('dealer_type')->nullable();
-            $table->string('zipcode')->nullable();
-            $table->string('mobile');
+            $table->string('zipcode', 10)->nullable();
+            $table->string('mobile', 20);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
