@@ -15,6 +15,7 @@ class CreateVehiclesTable extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('category_id');
             $table->string('vin_number');
             $table->string('address');
@@ -25,10 +26,10 @@ class CreateVehiclesTable extends Migration
             $table->unsignedInteger('mileage');
             $table->string('transmission', 50);
             $table->string('drivetrain', 50);
-            $table->string('color', 10);
+            $table->string('color', 20);
             $table->string('trim', 50);
             $table->string('engine_type', 50);
-            $table->string('fuel_type', 10);
+            $table->string('fuel_type', 20);
             $table->string('auction_type', 20);
             $table->decimal('price', 18, 4);
             $table->unsignedTinyInteger('status')->default(0); // 0 - listed, 1 auctioned, 2 sold
