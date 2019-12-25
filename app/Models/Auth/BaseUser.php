@@ -3,16 +3,18 @@
 namespace App\Models\Auth;
 
 use App\Models\Traits\Uuid;
+use Laravel\Cashier\Billable;
 use Altek\Eventually\Eventually;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Altek\Accountant\Contracts\Recordable;
 use Lab404\Impersonate\Models\Impersonate;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Auth\Traits\SendUserPasswordReset;
+use Rinvex\Subscriptions\Traits\HasSubscriptions;
 use Altek\Accountant\Recordable as RecordableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
 
 /**
  * Class User.
@@ -27,7 +29,8 @@ abstract class BaseUser extends Authenticatable implements Recordable
         SendUserPasswordReset,
         SoftDeletes,
         Uuid,
-        HasApiTokens;
+        HasApiTokens,
+        HasSubscriptions;
 
     /**
      * The attributes that are mass assignable.

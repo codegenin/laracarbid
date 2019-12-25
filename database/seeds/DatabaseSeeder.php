@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(VehicleCategoryTableSeeder::class);
         $this->call(VehicleTableSeeder::class);
         $this->call(FaqTableSeeder::class);
+        $this->call(PlansTableSeeder::class);
         Model::reguard();
     }
 }

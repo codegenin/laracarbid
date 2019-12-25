@@ -95,4 +95,10 @@ return [
         'scopes' => [],
         'with' => [],
     ],
+
+    'stripe' => [
+        'model' => App\Models\Auth\User::class,
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET')
+    ]
 ];

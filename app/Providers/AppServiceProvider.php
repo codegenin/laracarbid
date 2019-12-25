@@ -16,6 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Disabled cashier migration
+        #Cashier::ignoreMigrations();
+
         // Sets third party service providers that are only needed on local/testing environments
         if ($this->app->environment() !== 'production') {
             /**
@@ -49,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
          * Set the session variable for whether or not the app is using RTL support
          * For use in the blade directive in BladeServiceProvider
          */
-        if (! app()->runningInConsole()) {
+        if (!app()->runningInConsole()) {
             if (config('locale.languages')[config('app.locale')][2]) {
                 session(['lang-rtl' => true]);
             } else {
