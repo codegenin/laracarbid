@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Vehicle\ListedVehicleController;
 use App\Http\Controllers\Api\Vehicle\VehicleCategoryController;
 
 /*
@@ -14,5 +15,8 @@ Route::group(['namespace' => 'Vehicle', 'prefix' => 'vehicle', 'as' => 'vehicle.
 
         // Vehicle Category
         Route::get('categories', [VehicleCategoryController::class, 'index'])->name('category.index');
+
+        // Vehicle Endpoints
+        Route::get('listed', [ListedVehicleController::class, 'index'])->name('listed');
     });
 });

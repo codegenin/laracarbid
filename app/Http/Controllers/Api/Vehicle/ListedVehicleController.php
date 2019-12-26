@@ -5,26 +5,27 @@ namespace App\Http\Controllers\Api\Vehicle;
 use App\Http\Controllers\Api\BaseResponseController;
 use App\Http\Resources\Vehicle\VehicleCategoryResource;
 use App\Repositories\Api\Vehicle\VehicleCategoryRepository;
+use App\Repositories\Api\Vehicle\VehicleRepository;
 
 /**
  * Class ListedVehicleController
  */
 class ListedVehicleController extends BaseResponseController
 {
-    protected $categoryRepository;
+    protected $vehicleRepository;
 
-    public function __construct(VehicleCategoryRepository $categoryRepository)
+    public function __construct(VehicleRepository $vehicleRepository)
     {
-        $this->categoryRepository = $categoryRepository;
+        $this->vehicleRepository = $vehicleRepository;
     }
 
     public function index()
     {
-        $categories = $this->categoryRepository->where('active', 1)->orderBy('order')->get();
+        $vehicles = auth()->user()->vehicles;
 
         return $this->responseWithSuccess(
             __('api.messages.response_success'),
-            VehicleCategoryResource::collection($categories)
+            $vehicles
         );
     }
 }

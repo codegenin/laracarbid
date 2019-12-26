@@ -19,7 +19,7 @@ class PlanTableSeeder extends Seeder
         $this->disableForeignKeys();
 
         $planOne = app('rinvex.subscriptions.plan')->create([
-            'name' => '$295',
+            'name' => 'Basic',
             'description' => '1-10 Monthly Transactions',
             'price' => 295,
             'signup_fee' => 0,
@@ -37,7 +37,7 @@ class PlanTableSeeder extends Seeder
         ]);
 
         $planTwo = app('rinvex.subscriptions.plan')->create([
-            'name' => '$695',
+            'name' => 'Advance',
             'description' => '1-35 Monthly Transactions',
             'price' => 695,
             'signup_fee' => 0,
@@ -55,7 +55,7 @@ class PlanTableSeeder extends Seeder
         ]);
 
         $planThree = app('rinvex.subscriptions.plan')->create([
-            'name' => '$995',
+            'name' => 'Professional',
             'description' => '1-10 Monthly Transactions',
             'price' => 995,
             'signup_fee' => 0,

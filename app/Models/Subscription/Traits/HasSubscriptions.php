@@ -50,7 +50,7 @@ trait HasSubscriptions
      *
      * @param string $subscriptionSlug
      *
-     * @return \Rinvex\Subscriptions\Models\PlanSubscription|null
+     * @return \App\Models\Subscription\PlanSubscription|null
      */
     public function subscription(string $subscriptionSlug): ?PlanSubscription
     {
@@ -60,9 +60,9 @@ trait HasSubscriptions
     /**
      * Get subscribed plans.
      *
-     * @return \Rinvex\Subscriptions\Models\PlanSubscription|null
+     * @return \App\Models\Subscription\PlanSubscription|null
      */
-    public function subscribedPlans(): ?PlanSubscription
+    public function subscribedPlans()
     {
         $planIds = $this->subscriptions->reject->inactive()->pluck('plan_id')->unique();
 
