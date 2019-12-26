@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Subscription;
 
 use App\Http\Controllers\Api\BaseResponseController;
+use App\Http\Resources\Subscription\PlanResource;
 use App\Repositories\Api\Subscription\PlanRepository;
 
 /**
@@ -23,7 +24,7 @@ class ListPlanController extends BaseResponseController
 
         return $this->responseWithSuccess(
             __('api.messages.response_success'),
-            $plans
+            PlanResource::collection($plans)
         );
     }
 }

@@ -21,16 +21,14 @@ class SubscribeUserController extends BaseResponseController
 
     public function index(SubscribeUserRequest $request)
     {
-        // Check if subscribe
-        if (count(auth()->user()->subscriptions) <= 0) {
-            $plan = $this->planRepository->getById($request->plan_id);
-            auth()->user()->newSubscription($plan->name, $plan);
+        // @todo Add payment gateway here
 
-            return $this->responseWithSuccess(
-                __('api.subscription.subscribe_success')
-            );
-        }
+        // Subscribe the user
+        $plan = $this->planRepository->getById($request->plan_id);
+        auth()->user()->newSubscription($plan->name, $plan);
 
-        return $this->responseWithError(__('api.subscription.subscribe_already'));
+        return $this->responseWithSuccess(
+            __('api.subscription.subscribe_success')
+        );
     }
 }
