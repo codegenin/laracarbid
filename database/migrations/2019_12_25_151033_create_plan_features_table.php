@@ -24,14 +24,14 @@ class CreatePlanFeaturesTable extends Migration
             $table->string('value');
             $table->smallInteger('resettable_period')->unsigned()->default(0);
             $table->string('resettable_interval')->default('month');
-            $table->mediumInteger('sort_order')->unsigned()->default(0);
+            $table->unsignedMediumInteger('sort_order')->default(0);
             $table->timestamps();
             $table->softDeletes();
 
             // Indexes
             $table->unique(['plan_id', 'slug']);
             $table->foreign('plan_id')->references('id')->on(config('rinvex.subscriptions.tables.plans'))
-                  ->onDelete('cascade')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

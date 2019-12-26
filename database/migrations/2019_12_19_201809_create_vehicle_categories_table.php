@@ -19,7 +19,7 @@ class CreateVehicleCategoriesTable extends Migration
             $table->string('description')->nullable();
             $table->string('image_url')->nullable();
             $table->boolean('active')->default(1);
-            $table->unsignedTinyInteger('order')->default(0);
+            $table->unsignedMediumInteger('sort_order')->default(0);
             $table->timestamps();
         });
     }

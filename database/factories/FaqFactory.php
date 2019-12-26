@@ -7,9 +7,9 @@ use Faker\Generator as Faker;
 
 $factory->define(Faq::class, function (Faker $faker) {
     return [
-        'question' => $faker->sentence(rand(5, 10)),
-        'answer' => $faker->paragraph(),
-        'order' => rand(1, 10),
-        'active' => 1,
+        'question'   => $faker->sentence(rand(5, 10)),
+        'answer'     => $faker->paragraph(),
+        'sort_order' => rand(1, 10),
+        'active'     => 1,
     ];
 });

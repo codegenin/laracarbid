@@ -18,7 +18,7 @@ class CreateFaqsTable extends Migration
             $table->string('question');
             $table->text('answer');
             $table->unsignedTinyInteger('active')->default(0);
-            $table->unsignedTinyInteger('order')->default(0);
+            $table->unsignedMediumInteger('sort_order')->default(0);
             $table->timestamps();
         });
     }

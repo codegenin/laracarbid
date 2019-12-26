@@ -19,7 +19,7 @@ class CreatePagesTable extends Migration
             $table->string('slug');
             $table->text('content');
             $table->boolean('active')->default(true);
-            $table->unsignedTinyInteger('order')->default(0);
+            $table->unsignedMediumInteger('sort_order')->default(0);
             $table->timestamps();
         });
     }

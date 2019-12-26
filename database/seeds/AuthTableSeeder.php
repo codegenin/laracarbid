@@ -30,11 +30,17 @@ class AuthTableSeeder extends Seeder
             'password_histories',
             'password_resets',
             'social_accounts',
+            'oauth_clients',
+            'oauth_access_tokens',
+            'oauth_personal_access_clients',
         ]);
 
         $this->call(UserTableSeeder::class);
         $this->call(PermissionRoleTableSeeder::class);
         $this->call(UserRoleTableSeeder::class);
+
+        // Install passport
+        \Artisan::call('passport:install');
 
         $this->enableForeignKeys();
     }

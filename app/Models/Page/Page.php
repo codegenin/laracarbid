@@ -8,10 +8,18 @@ use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
 use Altek\Accountant\Recordable as RecordableTrait;
 use Altek\Eventually\Eventually;
+use Spatie\EloquentSortable\SortableTrait;
 
 class Page extends Model implements Recordable
 {
-    use HasSlug, Eventually, RecordableTrait;
+    use HasSlug,
+        Eventually,
+        RecordableTrait,
+        SortableTrait;
+
+    public $sortable = [
+        'order_column_name'  => 'sort_order'
+    ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
