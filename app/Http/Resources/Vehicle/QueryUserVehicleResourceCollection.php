@@ -16,4 +16,12 @@ class QueryUserVehicleResourceCollection extends ResourceCollection
     {
         return parent::toArray($request);
     }
+
+    public function with($request)
+    {
+        return [
+            'status'  => true,
+            'message' => 'Success'
+        ];
+    }
 }

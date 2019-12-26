@@ -10,6 +10,7 @@ use App\Repositories\Api\Auth\UserRepository;
 use App\Repositories\Api\Vehicle\VehicleRepository;
 use App\Http\Controllers\Api\BaseResponseController;
 use App\Http\Resources\Vehicle\QueryUserVehicleResource;
+use App\Http\Resources\Vehicle\QueryUserVehicleResourceCollection;
 use App\Http\Resources\Vehicle\VehicleCategoryResource;
 use App\Repositories\Api\Vehicle\VehicleCategoryRepository;
 
@@ -35,11 +36,8 @@ class QueryUserVehicleController extends BaseResponseController
             ->allowedFilters(AllowedFilter::exact('status'))
             ->allowedIncludes(['category'])
             ->where('user_id', auth()->user()->id)
-            ->get();
+            ->paginate(($request->per_page) ?? 15);
 
-        return $this->responseWithSuccess(
-            __('api.messages.response_success'),
-            QueryUserVehicleResource::collection($vehicles)
-        );
+        return new QueryUserVehicleResourceCollection($vehicles);
     }
 }

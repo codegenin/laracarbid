@@ -32,9 +32,9 @@ class BaseResponseController extends Controller
     public function responseWithSuccess($message = 'success', $data = '',  $status = 200)
     {
         return response()->json([
+            'data'    => $data,
             'status'  => true,
-            'message' => $message,
-            'data'    => $data
+            'message' => $message
         ], $status);
     }
 }
