@@ -2,13 +2,16 @@
 
 namespace App\Models\Page;
 
+use Altek\Accountant\Contracts\Recordable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
+use Altek\Accountant\Recordable as RecordableTrait;
+use Altek\Eventually\Eventually;
 
-class Page extends Model
+class Page extends Model implements Recordable
 {
-    use HasSlug;
+    use HasSlug, Eventually, RecordableTrait;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 

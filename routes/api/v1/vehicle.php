@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\Vehicle\ListedVehicleController;
 use App\Http\Controllers\Api\Vehicle\VehicleCategoryController;
+use App\Http\Controllers\Api\Vehicle\QueryUserVehicleController;
 
 /*
  * Vehicle Controllers
@@ -16,7 +16,7 @@ Route::group(['namespace' => 'Vehicle', 'prefix' => 'vehicle', 'as' => 'vehicle.
         // Vehicle Category
         Route::get('categories', [VehicleCategoryController::class, 'index'])->name('category.index');
 
-        // Vehicle Endpoints
-        Route::get('listed', [ListedVehicleController::class, 'index'])->name('listed');
+        // Query vehicles for the logged in user
+        Route::get('user-query', [QueryUserVehicleController::class, 'index'])->name('user.query');
     });
 });

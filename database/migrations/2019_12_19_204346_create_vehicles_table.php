@@ -15,6 +15,7 @@ class CreateVehiclesTable extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->uuid('uuid');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('category_id');
             $table->string('vin_number');
@@ -31,7 +32,7 @@ class CreateVehiclesTable extends Migration
             $table->string('engine_type', 50);
             $table->string('fuel_type', 20);
             $table->string('auction_type', 20);
-            $table->decimal('price', 18, 4);
+            $table->decimal('price', 18, 2);
             $table->unsignedTinyInteger('status')->default(0); // 0 - listed, 1 auctioned, 2 sold
             $table->dateTime('auctioned_at')->nullable(); // update field when item has been set to auctioned first time
             $table->softDeletes();
