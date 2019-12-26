@@ -3,7 +3,6 @@
 namespace App\Models\Auth;
 
 use App\Models\Traits\Uuid;
-use Laravel\Cashier\Billable;
 use Altek\Eventually\Eventually;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -12,7 +11,7 @@ use Altek\Accountant\Contracts\Recordable;
 use Lab404\Impersonate\Models\Impersonate;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Auth\Traits\SendUserPasswordReset;
-use Rinvex\Subscriptions\Traits\HasSubscriptions;
+use App\Models\Subscription\Traits\HasSubscriptions;
 use Altek\Accountant\Recordable as RecordableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
