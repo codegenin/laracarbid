@@ -23,6 +23,11 @@ class ProfileResource extends JsonResource
             'dealer_type' => ($this->profile->deale_type) ?? '',
             'zip'         => ($this->profile->zipcode) ?? '',
             'mobile'      => ($this->profile->mobile) ?? '',
+            'avatars'      => [
+                'small' => $this->getMedia('avatars')[0]->getUrl('small'),
+                'medium' => $this->getMedia('avatars')[0]->getUrl('medium'),
+                'large' => $this->getMedia('avatars')[0]->getUrl('large')
+            ]
         ];
     }
 }

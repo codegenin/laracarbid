@@ -9,16 +9,19 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Altek\Accountant\Contracts\Recordable;
 use Lab404\Impersonate\Models\Impersonate;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use App\Models\Auth\Traits\SendUserPasswordReset;
-use App\Models\Subscription\Traits\HasSubscriptions;
 use Altek\Accountant\Recordable as RecordableTrait;
+use App\Models\Subscription\Traits\HasSubscriptions;
+use App\Models\Traits\MediaLibray;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class User.
  */
-abstract class BaseUser extends Authenticatable implements Recordable
+abstract class BaseUser extends Authenticatable implements Recordable, HasMedia
 {
     use HasRoles,
         Eventually,
@@ -29,7 +32,8 @@ abstract class BaseUser extends Authenticatable implements Recordable
         SoftDeletes,
         Uuid,
         HasApiTokens,
-        HasSubscriptions;
+        HasSubscriptions,
+        HasMediaTrait;
 
     /**
      * The attributes that are mass assignable.

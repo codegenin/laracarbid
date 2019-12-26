@@ -18,6 +18,8 @@ use App\Notifications\Api\Auth\UserNeedsConfirmation;
  */
 class UserRepository extends BaseRepository
 {
+    public $model;
+
     /**
      * UserRepository constructor.
      *

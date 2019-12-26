@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\User\ProfileController;
 use App\Http\Controllers\Api\User\SetLocaleController;
+use App\Http\Controllers\Api\User\UploadAvatarController;
 
 /*
  * User Access Controllers
@@ -15,6 +16,8 @@ Route::group(['namespace' => 'User', 'prefix' => 'user', 'as' => 'user.'], funct
 
         // User profile
         Route::get('profile', [ProfileController::class, 'index'])->name('profile');
+        // Upload avatar image
+        Route::post('avatar', [UploadAvatarController::class, 'index'])->name('avatar');
         // Update user locale
         Route::post('locale', [SetLocaleController::class, 'index'])->name('locale.post');
     });
