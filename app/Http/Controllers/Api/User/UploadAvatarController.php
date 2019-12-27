@@ -19,7 +19,6 @@ class UploadAvatarController extends BaseResponseController
     public function index(Request $request)
     {
         auth()->user()->addMediaFromRequest('file')
-            ->preservingOriginal()
             ->toMediaCollection('avatars');
 
         return $this->responseWithSuccess(__('api.messages.response_success'));

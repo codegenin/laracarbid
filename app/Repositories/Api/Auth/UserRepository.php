@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Events\Api\Auth\UserConfirmed;
 use App\Exceptions\ApiResponseException;
+use App\Models\Auth\UserProfile;
 use App\Notifications\Api\Auth\UserNeedsConfirmation;
 
 /**
@@ -168,50 +169,47 @@ class UserRepository extends BaseRepository
      */
     public function update($id, array $input, $image = false)
     {
-        $user = $this->getById($id);
-        $user->first_name = $input['first_name'];
-        $user->last_name = $input['last_name'];
-        $user->avatar_type = $input['avatar_type'];
+        $user              = $this->getById($id);
+        $user->first_name  = $input['first_name'];
+        $user->last_name   = $input['last_name'];
 
-        // Upload profile image if necessary
-        if ($image) {
-            $user->avatar_location = $image->store('/avatars', 'public');
-        } else {
-            // No image being passed
-            if ($input['avatar_type'] === 'storage') {
-                // If there is no existing image
-                if (auth()->user()->avatar_location === '') {
-                    throw new GeneralException('You must supply a profile image.');
-                }
-            } else {
-                // If there is a current image, and they are not using it anymore, get rid of it
-                if (auth()->user()->avatar_location !== '') {
-                    Storage::disk('public')->delete(auth()->user()->avatar_location);
-                }
-
-                $user->avatar_location = null;
-            }
-        }
+        // Update user profile
+        $user->profile()->update([
+            'business_name'  => $input['business_name'],
+            'license_number' => $input['license_number'],
+            'dealer_bond'    => $input['dealer_bond'],
+            'dealer_type'    => $input['dealer_type'],
+            'zipcode'        => $input['zipcode']
+        ]);
 
         if ($user->canChangeEmail()) {
             //Address is not current address so they need to reconfirm
-            if ($user->email !== $input['email']) {
+            if (
+                $user->email !== $input['email']
+                or $user->profile->mobile != $input['mobile']
+            ) {
                 //Emails have to be unique
-                if ($this->getByColumn($input['email'], 'email')) {
+                if ($user->email !== $input['email'] and $this->getByColumn($input['email'], 'email')) {
                     throw new GeneralException(__('exceptions.frontend.auth.email_taken'));
                 }
 
-                // Force the user to re-verify his email address if config is set
-                if (config('access.users.confirm_email')) {
-                    $user->confirmation_code = md5(uniqid(mt_rand(), true));
-                    $user->confirmed = false;
-                    $user->notify(new UserNeedsConfirmation($user->confirmation_code));
+                if ($user->profile->mobile != $input['mobile'] and  UserProfile::where('mobile', $input['mobile'])->first()) {
+                    throw new GeneralException(__('exceptions.frontend.auth.mobile_taken'));
                 }
+
+                // Force the user to re-verify his email / mobile if config is set
+                $user->confirmation_code = sms_confirmation_code();
+                $user->confirmed = false;
+                $user->notify(new UserNeedsConfirmation($user->confirmation_code));
+
                 $user->email = $input['email'];
                 $updated = $user->save();
 
-                // Send the new confirmation e-mail
+                $user->profile()->update([
+                    'mobile' => $input['mobile']
+                ]);
 
+                // Send the new confirmation e-mail
                 return [
                     'success' => $updated,
                     'email_changed' => true,
